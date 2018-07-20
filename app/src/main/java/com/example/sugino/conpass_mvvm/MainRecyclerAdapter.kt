@@ -18,15 +18,24 @@ class MainRecyclerAdapter (private val context: Context): RecyclerView.Adapter <
         field = value
     }
 
+    private var clickListener: (() -> Unit)? = null
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val ev = events?.getOrNull(position) ?: return
         holder.binding.event = ev
+        holder.binding.root.setOnClickListener {
+            clickListener?.invoke()
+        }
     }
 
     override fun onCreateViewHolder(p0: ViewGroup, p1: Int): ViewHolder {
         val binding = DataBindingUtil.inflate<CellMainBinding>(LayoutInflater.from(context), R.layout.cell_main,p0,false)
 
         return ViewHolder(binding)
+    }
+
+    fun setOnClickListener(callback: () -> Unit) {
+        this.clickListener = callback
     }
 
     override fun getItemCount() = events?.size ?: 0

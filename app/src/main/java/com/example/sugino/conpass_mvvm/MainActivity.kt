@@ -13,8 +13,7 @@ import com.example.sugino.conpass_mvvm.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity(), LifecycleOwner{
 
     private lateinit var mainViewModel: MainViewModel
-    private val eventListAdapter by lazy { MainRecyclerAdapter(this@MainActivity) }
-
+    private val eventListAdapter by lazy { MainRecyclerAdapter(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +21,8 @@ class MainActivity : AppCompatActivity(), LifecycleOwner{
 
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         lifecycle.addObserver(mainViewModel)
+
+        // adapterを適用
 
         mainViewModel.events.observe(this, Observer { eventListAdapter.events = it?.events  })
             binding.viewModel = mainViewModel
