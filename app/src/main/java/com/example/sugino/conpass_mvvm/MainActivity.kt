@@ -6,12 +6,14 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import com.example.sugino.conpass_mvvm.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity(), LifecycleOwner{
 
     private lateinit var mainViewModel: MainViewModel
-//    private val eventListAdapter by lazy { MainRecyclerAdapter(this@MainActivity) }
+    private val eventListAdapter by lazy { MainRecyclerAdapter(this@MainActivity) }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,10 +23,11 @@ class MainActivity : AppCompatActivity(), LifecycleOwner{
         mainViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         lifecycle.addObserver(mainViewModel)
 
-        mainViewModel.events.observe(this, Observer {
-            //TODO
-            // })
+        mainViewModel.events.observe(this, Observer { eventListAdapter.events = it?.events  })
             binding.viewModel = mainViewModel
-        })
+            with(binding.listView) {
+                adapter = eventListAdapter
+                layoutManager = LinearLayoutManager(this@MainActivity)
+            }
     }
 }
